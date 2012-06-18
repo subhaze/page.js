@@ -1,17 +1,17 @@
 
 var expect = chai.expect;
-var called = 0; // set to numeric to make sure call count is just 1
+var called;
 
 // XXX: super lame hack
 
 page('/', function(){
-  called++;
+  called = true;
 })
 
 describe('page', function(){
   describe('on page load', function(){
     it('should invoke the matching callback', function(){
-      expect(called).to.equal(1);
+      expect(called).to.equal(true);
     })
   })
 

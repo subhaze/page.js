@@ -14,12 +14,6 @@
   var base = '';
 
   /**
-   * Running flag.
-   */
-
-   var running;
-
-  /**
    * Register `path` with callback `fn()`,
    * or route `path`, or `page.start()`.
    *
@@ -82,12 +76,9 @@
 
   page.start = function(options){
     options = options || {};
-    if (running) return;
-    running = true;
     if (false === options.dispatch) dispatch = false;
     if (false !== options.popstate) addEventListener('popstate', onpopstate, false);
     if (false !== options.click) addEventListener('click', onclick, false);
-    if(dispatch) page.show(location.pathname, null, true, dispatch);
   };
 
   /**
@@ -97,7 +88,6 @@
    */
 
   page.stop = function(){
-    running = false;
     removeEventListener('click', onclick, false);
     removeEventListener('popstate', onpopstate, false);
   };
@@ -321,6 +311,8 @@
     if (e.state) {
       var path = e.state.path;
       page.replace(path, e.state);
+    } else {
+      page.show(location.pathname, null, true, dispatch);
     }
   }
 
@@ -348,8 +340,8 @@
    */
 
   function sameOrigin(href) {
-    var origin = location.protocol + '//' + location.hostname;
-    if (location.port) origin += ':' + location.port;
+    var port = location.port ? ':' + location.port : ''; 
+    var origin = location.protocol + '//' + location.hostname + port;
     return 0 == href.indexOf(origin);
   }
 
